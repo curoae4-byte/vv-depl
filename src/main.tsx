@@ -31,7 +31,7 @@ function Root() {
   }, [])
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/vv-depl/">
       <>
         <Routes>
           <Route path="/" element={<App />} />

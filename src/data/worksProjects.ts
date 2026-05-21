@@ -23,7 +23,7 @@ export const worksProjects: WorkProject[] = [
     agency: 'In-house',
     release: '2024',
     image: 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?auto=format&fit=crop&q=80&w=1400',
-    video: '/videos/project_1.mp4',
+    video: 'videos/project_1.mp4',
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ export const worksProjects: WorkProject[] = [
     agency: 'VV Studio',
     release: '2024',
     image: 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?auto=format&fit=crop&q=80&w=1400',
-    video: '/videos/project_2.mp4',
+    video: 'videos/project_2.mp4',
   },
   {
     id: 3,
@@ -47,7 +47,7 @@ export const worksProjects: WorkProject[] = [
     agency: 'VV Studio',
     release: '2023',
     image: 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?auto=format&fit=crop&q=80&w=1400',
-    video: '/videos/project_3.mp4',
+    video: 'videos/project_3.mp4',
   },
   {
     id: 4,
@@ -59,7 +59,7 @@ export const worksProjects: WorkProject[] = [
     agency: 'Partner Agency',
     release: '2023',
     image: 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?auto=format&fit=crop&q=80&w=1400',
-    video: '/videos/project_4.mp4',
+    video: 'videos/project_4.mp4',
   },
   {
     id: 5,
@@ -71,7 +71,7 @@ export const worksProjects: WorkProject[] = [
     agency: 'VV Studio',
     release: '2023',
     image: 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?auto=format&fit=crop&q=80&w=1400',
-    video: '/videos/project_5.mp4',
+    video: 'videos/project_5.mp4',
   },
   {
     id: 6,
@@ -83,6 +83,6 @@ export const worksProjects: WorkProject[] = [
     agency: 'VV × Lab',
     release: '2022',
     image: 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?auto=format&fit=crop&q=80&w=1400',
-    video: '/videos/project_6.mp4',
+    video: 'videos/project_6.mp4',
   },
 ]
