@@ -1,34 +1,10 @@
 @import "tailwindcss";
 
-/* Подключаем шрифт Bounded */
+/* Подключаем локальный вариативный шрифт Bounded */
 @font-face {
   font-family: 'Bounded';
-  src: url('https://fonts.cdnfonts.com/s/91060/Bounded-Black.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Bounded';
-  src: url('https://fonts.cdnfonts.com/s/91060/Bounded-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Bounded';
-  src: url('https://fonts.cdnfonts.com/s/91060/Bounded-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Bounded';
-  src: url('https://fonts.cdnfonts.com/s/91060/Bounded-Regular.woff') format('woff');
-  font-weight: 400;
+  src: url('./fonts/Bounded-Variable.ttf') format('truetype');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
