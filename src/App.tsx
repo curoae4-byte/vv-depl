@@ -17,40 +17,51 @@ gsap.registerPlugin(ScrollTrigger)
 
 // Проверяем, нужно ли показывать заставку (прелоадер)
 const checkPreloaderDone = () => {
-  // Если перешли с другой страницы этого же сайта, заставку не показываем
-  const isNavFromInternal = sessionStorage.getItem('vv-nav-from-internal') === 'true';
-  const isReferrerInternal = document.referrer && document.referrer.includes(window.location.origin);
-  
-  if (isNavFromInternal || isReferrerInternal) {
-    console.log('Внутренний переход. Пропускаем заставку.')
-    sessionStorage.removeItem('vv-nav-from-internal')
-    return true
-  }
-
-  // Если пользователь еще не принял куки, показываем заставку всегда
-  const cookieConsent = localStorage.getItem('vv-cookie-consent')
-  if (!cookieConsent) {
-    console.log('Куки не приняты. Показываем заставку.')
-    return false
-  }
-
-  // Проверяем, не истекло ли время "сна" заставки (24 часа)
-  const itemStr = localStorage.getItem('vv-preloader-done')
-  if (!itemStr) return false
   try {
-    const item = JSON.parse(itemStr)
-    const timeLeft = item.expiry - Date.now()
+    // Если перешли с другой страницы этого же сайта, заставку не показываем
+    const isNavFromInternal = sessionStorage.getItem('vv-nav-from-internal') === 'true';
+    const isReferrerInternal = document.referrer && document.referrer.includes(window.location.origin);
     
-    if (timeLeft <= 0) {
-      console.log('Время ожидания вышло. Снова показываем заставку.')
-      localStorage.removeItem('vv-preloader-done')
+    if (isNavFromInternal || isReferrerInternal) {
+      console.log('Внутренний переход. Пропускаем заставку.')
+      sessionStorage.removeItem('vv-nav-from-internal')
+      return true
+    }
+
+    // Если пользователь еще не принял куки, показываем заставку всегда
+    const cookieConsent = localStorage.getItem('vv-cookie-consent')
+    if (!cookieConsent) {
+      console.log('Куки не приняты. Показываем заставку.')
+      return false
+    }
+
+    // Проверяем, не истекло ли время "сна" заставки (24 часа)
+    const itemStr = localStorage.getItem('vv-preloader-done')
+    if (!itemStr) {
+      console.log('Данных о прелоадере нет. Показываем.')
       return false
     }
     
-    console.log(`Заставка пропущена. Появится снова через: ${Math.round(timeLeft / 1000)} сек.`)
-    return item.value === '1'
-  } catch {
-    return itemStr === '1'
+    try {
+      const item = JSON.parse(itemStr)
+      const timeLeft = item.expiry - Date.now()
+      
+      if (timeLeft <= 0) {
+        console.log('Время ожидания вышло. Снова показываем заставку.')
+        localStorage.removeItem('vv-preloader-done')
+        return false
+      }
+      
+      console.log(`Заставка пропущена. Появится снова через: ${Math.round(timeLeft / 1000)} сек.`)
+      // ВАЖНО: возвращаем true ТОЛЬКО если значение '1', иначе показываем
+      return item.value === '1'
+    } catch (e) {
+      console.error('Ошибка парсинга localStorage:', e)
+      return false
+    }
+  } catch (e) {
+    console.error('Критическая ошибка при проверке прелоадера:', e)
+    return false
   }
 }
 
@@ -130,6 +141,7 @@ function App() {
       resetToTop()
       html.style.overflow = 'hidden'
       body.style.overflow = 'hidden'
+      body.style.backgroundColor = '#080808' // Принудительно ставим темный фон
       body.style.touchAction = 'none'
       return
     }
@@ -143,6 +155,7 @@ function App() {
       lenisRef.current?.start()
       html.style.overflow = ''
       body.style.overflow = ''
+      body.style.backgroundColor = '' // Возвращаем как было
       body.style.touchAction = ''
       // Обновляем позиции анимаций через секунду
       setTimeout(() => {
@@ -203,25 +216,28 @@ function App() {
   return (
     <main className="bg-[#080808] text-[#F5F7F6] selection:bg-[#E10600] selection:text-[#F5F7F6]">
       {/* Экран загрузки */}
-      {loading && <Preloader onComplete={() => {
-        resetToTop()
-        const expiry = Date.now() + 24 * 60 * 60 * 1000 // Запоминаем на 24 часа
-        localStorage.setItem('vv-preloader-done', JSON.stringify({ value: '1', expiry }))
-        setLoading(false)
-      }} />}
-
-      {!loading && <Header />}
-
-      {/* Основное содержимое сайта */}
-      <div className={`app-shell ${loading ? '' : 'app-shell--ready'}`} aria-hidden={loading}>
-        <div className="relative">
-          <Hero />
-          <About />
-          <Portfolio />
-          <Contact />
-          <Footer />
-        </div>
-      </div>
+      {loading ? (
+        <Preloader onComplete={() => {
+          resetToTop()
+          const expiry = Date.now() + 24 * 60 * 60 * 1000 // Запоминаем на 24 часа
+          localStorage.setItem('vv-preloader-done', JSON.stringify({ value: '1', expiry }))
+          setLoading(false)
+        }} />
+      ) : (
+        <>
+          <Header />
+          {/* Основное содержимое сайта */}
+          <div className="app-shell app-shell--ready">
+            <div className="relative">
+              <Hero />
+              <About />
+              <Portfolio />
+              <Contact />
+              <Footer />
+            </div>
+          </div>
+        </>
+      )}
 
       <CookieBanner />
     </main>
