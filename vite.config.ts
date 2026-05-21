@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  // base: "/VV-Deploy/"
+  base: "/vv-depl/"
 })
