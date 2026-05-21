@@ -74,11 +74,11 @@ function App() {
   useEffect(() => {
     // Настраиваем мягкий скролл
     const lenis = new Lenis({
-      duration: 1.5,
+      duration: 1.6,
       easing: (t) => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
-      wheelMultiplier: 0.75,
-      touchMultiplier: 1,
+      wheelMultiplier: 0.8,
+      touchMultiplier: 0.9,
       syncTouch: true,
     })
     lenisRef.current = lenis

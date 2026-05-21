@@ -133,14 +133,14 @@ const Footer = () => {
   }, [])
 
   return (
-    <footer className="relative bg-[#080808] border-t border-[#F5F7F6]/5 pt-20 sm:pt-24 lg:pt-32 pb-10 sm:pb-12 z-10" id="contact">
+    <footer className="relative bg-[#080808] border-t border-[#F5F7F6]/5 pt-20 sm:pt-24 lg:pt-32 pb-10 sm:pb-12 z-10 overflow-hidden" id="contact">
       <PageShell>
         {/* Основной контент футера */}
         {/* Адаптивная сетка: на мобилках в один столбец, на планшетах и выше — в несколько */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-14 lg:gap-16 mb-16 sm:mb-20 lg:mb-24">
           {/* Блок бренда */}
           <div className="col-span-1 min-w-0 md:col-span-2 lg:col-span-2">
-            <h2 className="text-[clamp(1rem,4.2vw,3.2rem)] font-bounded tracking-tight sm:tracking-tighter mb-6 sm:mb-8 leading-[0.94]">
+            <h2 className="text-[clamp(2.4rem,8vw,3.2rem)] sm:text-[clamp(1rem,4.2vw,3.2rem)] font-bounded tracking-tight sm:tracking-tighter mb-6 sm:mb-8 leading-[0.94]">
               <span className="block whitespace-nowrap">VALERY</span>
               <span className="block whitespace-nowrap">VISUALS</span>
             </h2>

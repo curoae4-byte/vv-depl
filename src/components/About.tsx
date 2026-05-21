@@ -176,7 +176,7 @@ const About = () => {
             {/* центр — min-w-0 + флюидный шрифт, чтобы длинные слова не резало */}
             <div className="flex min-w-0 w-full max-w-full flex-col gap-5 sm:gap-8">
               <h2
-                className="w-full min-w-0 max-w-full font-['Bounded'] font-light text-[#F5F7F6] drop-shadow-2xl break-words [font-size:clamp(2rem,calc(4vw+1rem),5.5rem)] sm:[font-size:clamp(2.35rem,calc(3.4vw+1.2rem),6.25rem)] lg:[font-size:clamp(2.75rem,calc(2.8vw+1.35rem),7rem)] xl:[font-size:clamp(3rem,calc(2.2vw+1.5rem),7.5rem)] leading-[0.88] tracking-tight sm:tracking-tighter"
+                className="w-full min-w-0 max-w-full font-['Bounded'] font-black text-[#F5F7F6] drop-shadow-2xl break-words [font-size:clamp(2rem,10vw,5rem)] sm:[font-size:clamp(2.5rem,8vw,6.5rem)] lg:[font-size:clamp(2.75rem,calc(2.8vw+1.35rem),7rem)] xl:[font-size:clamp(3rem,calc(2.2vw+1.5rem),7.5rem)] leading-[0.88] tracking-tight sm:tracking-tighter uppercase"
                 style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
               >
                 {service.title}

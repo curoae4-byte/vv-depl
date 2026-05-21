@@ -264,15 +264,15 @@ const Hero = () => {
             style={{ opacity: 0, transform: 'translateY(36px)' }}
           >
           <div className="mb-8">
-            <h1 className="text-[clamp(1.9rem,9.8vw,6rem)] xl:text-[7rem] font-bounded font-black tracking-tight sm:tracking-tighter leading-[0.93] mb-4 text-[#F5F7F6] [perspective:800px] break-normal">
+            <h1 className="text-[clamp(2.4rem,13vw,6rem)] sm:text-[clamp(1.9rem,9.8vw,6rem)] xl:text-[7rem] font-bounded font-black tracking-tight sm:tracking-tighter leading-[0.93] mb-4 text-[#F5F7F6] [perspective:800px] break-normal">
               <span className="block overflow-hidden">
                 <span className="hero-title-line block whitespace-nowrap font-black [transform-origin:50%_100%] will-change-transform">
-                  <span className="inline-block [transform:scaleX(1.18)]">VALERY</span>
+                  <span className="inline-block [transform:scaleX(1.05)] sm:[transform:scaleX(1.18)]">VALERY</span>
                 </span>
               </span>
               <span className="block overflow-hidden">
                 <span className="hero-title-line block whitespace-nowrap font-black [transform-origin:50%_100%] will-change-transform">
-                  <span className="inline-block [transform:scaleX(1.18)]">VISUALS</span>
+                  <span className="inline-block [transform:scaleX(1.05)] sm:[transform:scaleX(1.18)]">VISUALS</span>
                 </span>
               </span>
             </h1>
