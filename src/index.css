@@ -1,5 +1,38 @@
 @import "tailwindcss";
 
+/* Подключаем шрифт Bounded */
+@font-face {
+  font-family: 'Bounded';
+  src: url('https://fonts.cdnfonts.com/s/91060/Bounded-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bounded';
+  src: url('https://fonts.cdnfonts.com/s/91060/Bounded-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bounded';
+  src: url('https://fonts.cdnfonts.com/s/91060/Bounded-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bounded';
+  src: url('https://fonts.cdnfonts.com/s/91060/Bounded-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --font-bounded: "Bounded", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --color-primary: #E10600;
