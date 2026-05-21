@@ -51,7 +51,7 @@ const ProjectCard = ({
         transformStyle: 'preserve-3d',
       }}
       whileHover={{ scale: 1.01 }}
-      className="group relative aspect-video w-full cursor-pointer overflow-hidden rounded-xl border border-[#F5F7F6]/5 bg-[#111] [perspective:1000px]"
+      className="group relative aspect-video w-full cursor-pointer overflow-hidden rounded-xl border border-[#F5F7F6]/5 bg-[#111] [perspective:1000px] will-change-transform"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onOpen}

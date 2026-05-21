@@ -137,18 +137,18 @@ const CustomVideoPlayer = ({ url, title, onClose }: CustomVideoPlayerProps) => {
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-6 text-center"
+            className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-6 sm:p-10 text-center overflow-y-auto"
           >
-            <div className="text-[#E10600] mb-4">
-              <RotateCcw size={48} />
+            <div className="text-[#E10600] mb-3 sm:mb-4 shrink-0">
+              <RotateCcw size={40} className="sm:w-12 sm:h-12" />
             </div>
-            <h4 className="font-bounded text-lg text-[#F5F7F6] mb-2 uppercase">{error}</h4>
-            <p className="font-bounded text-[10px] text-[#F5F7F6]/40 uppercase tracking-widest mb-6">
+            <h4 className="font-bounded text-base sm:text-lg text-[#F5F7F6] mb-2 uppercase px-4">{error}</h4>
+            <p className="font-bounded text-[9px] sm:text-[10px] text-[#F5F7F6]/40 uppercase tracking-widest mb-6 sm:mb-8 shrink-0">
               Ошибка: {url.split('/').pop()?.replace('.mp4', '') || 'Неизвестное видео'}
             </p>
             <button 
               onClick={onClose}
-              className="px-6 py-2 border border-[#F5F7F6]/20 rounded-full font-bounded text-[10px] uppercase tracking-widest text-[#F5F7F6] hover:bg-[#F5F7F6] hover:text-black transition-all"
+              className="px-8 py-3 sm:px-6 sm:py-2 border border-[#F5F7F6]/20 rounded-full font-bounded text-[10px] uppercase tracking-widest text-[#F5F7F6] hover:bg-[#F5F7F6] hover:text-black transition-all active:scale-95 shrink-0 mb-4 sm:mb-0"
             >
               Закрыть
             </button>

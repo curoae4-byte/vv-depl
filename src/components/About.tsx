@@ -64,7 +64,7 @@ const About = () => {
         rotationX: -50,
         scale: 0.75,
         opacity: 0,
-        filter: 'blur(24px)'
+        filter: 'blur(12px)' // Уменьшили с 24px для производительности
       })
 
       // Прогресс-бар
@@ -98,7 +98,7 @@ const About = () => {
             rotationX: 50,
             scale: 0.75,
             opacity: 0,
-            filter: 'blur(24px)',
+            filter: 'blur(12px)', // Уменьшили с 24px
             ease: 'power2.inOut',
             duration: 1
           }, i)

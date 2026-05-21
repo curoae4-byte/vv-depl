@@ -76,12 +76,12 @@ function App() {
   useEffect(() => {
     // инициализируем плавный скролл
     const lenis = new Lenis({
-      duration: 1.65,
+      duration: 1.2, // Было 1.65 - ускоряем реакцию
       easing: (t) => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
-      wheelMultiplier: 0.78,
-      touchMultiplier: 0.9,
-      syncTouch: true,
+      wheelMultiplier: 1.0, // Было 0.78 - делаем прокрутку более отзывчивой
+      touchMultiplier: 1.5, // Было 0.9 - увеличиваем чувствительность тача
+      smoothTouch: false, // Отключаем плавность тача для мобилок, чтобы не было "киселя"
     })
     lenisRef.current = lenis
 
@@ -95,7 +95,7 @@ function App() {
     gsap.ticker.add(onTick)
 
     // чтобы не было странных "рывков" при лаге
-    gsap.ticker.lagSmoothing(0)
+    gsap.ticker.lagSmoothing(1000, 16)
 
     return () => {
       lenis.destroy()
