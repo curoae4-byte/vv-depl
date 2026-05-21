@@ -16,20 +16,21 @@ const Header = () => {
   const location = useLocation()
 
   const handleNavClick = (sectionId?: string) => {
-    setOpen(false)
+    setOpen(false) // Закрываем мобильное меню при клике
 
     if (!sectionId) return
 
     if (location.pathname === '/') {
+      // Если мы на главной, плавно скроллим к нужному блоку
       const target = document.getElementById(sectionId)
       if (!target) return
       
-      // Находим родительский spacer, если блок запинен GSAP
+      // Находим родительский spacer, если блок зафиксирован (pin) через GSAP
       const targetEl = target.closest('.pin-spacer') || target;
       let top = targetEl.getBoundingClientRect().top + window.scrollY;
       
       if (sectionId !== 'about') {
-        const headerOffset = 100
+        const headerOffset = 100 // Отступ, чтобы заголовок не прятался под шапкой
         top -= headerOffset
       }
       
@@ -37,6 +38,7 @@ const Header = () => {
       return
     }
 
+    // Если мы на другой странице, запоминаем цель и переходим на главную
     sessionStorage.setItem('vv-scroll-target', sectionId)
     sessionStorage.setItem('vv-nav-from-internal', 'true')
     navigate('/')
@@ -44,10 +46,12 @@ const Header = () => {
 
   useEffect(() => {
     if (!open) return
+    // Закрытие меню по кнопке Esc
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false)
     }
     window.addEventListener('keydown', onKey)
+    // Запрещаем скролл сайта, когда открыто меню
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {

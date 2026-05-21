@@ -131,7 +131,7 @@ const CustomVideoPlayer = ({ url, title, onClose }: CustomVideoPlayerProps) => {
         playsInline
       />
 
-      {/* Error State */}
+      {/* Окно ошибки */}
       <AnimatePresence>
         {error && (
           <motion.div 
@@ -156,7 +156,7 @@ const CustomVideoPlayer = ({ url, title, onClose }: CustomVideoPlayerProps) => {
         )}
       </AnimatePresence>
 
-      {/* Noise Overlay */}
+      {/* Эффект шума (зернистость) */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-[0.05] mix-blend-overlay z-0" 
         style={{
@@ -165,7 +165,7 @@ const CustomVideoPlayer = ({ url, title, onClose }: CustomVideoPlayerProps) => {
         }}
       />
 
-      {/* Overlays */}
+      {/* Элементы управления */}
       <AnimatePresence>
         {showControls && !error && (
           <motion.div
@@ -174,11 +174,11 @@ const CustomVideoPlayer = ({ url, title, onClose }: CustomVideoPlayerProps) => {
             exit={{ opacity: 0 }}
             className="absolute inset-0 z-10 flex flex-col justify-between p-4 sm:p-6 bg-gradient-to-b from-black/60 via-transparent to-black/80 pointer-events-none"
           >
-            {/* Top Bar */}
+            {/* Верхняя панель */}
             <div className="flex items-center justify-between pointer-events-auto">
               <div className="flex flex-col">
                 <span className="font-bounded text-[10px] uppercase tracking-[0.3em] text-[#E10600] mb-1">
-                  Now Playing
+                  СЕЙЧАС ИГРАЕТ
                 </span>
                 <h3 className="font-bounded text-lg sm:text-2xl uppercase text-[#F5F7F6] tracking-tight">
                   {title}
@@ -192,9 +192,9 @@ const CustomVideoPlayer = ({ url, title, onClose }: CustomVideoPlayerProps) => {
               </button>
             </div>
 
-            {/* Bottom Controls */}
+            {/* Нижняя панель управления */}
             <div className="flex flex-col gap-4 pointer-events-auto">
-              {/* Progress Bar */}
+              {/* Полоса прогресса */}
               <div className="relative w-full h-1 group/progress cursor-pointer">
                 <input
                   type="range"
@@ -253,7 +253,7 @@ const CustomVideoPlayer = ({ url, title, onClose }: CustomVideoPlayerProps) => {
         )}
       </AnimatePresence>
 
-      {/* Play Overlay when paused */}
+      {/* Значок Play в центре при паузе */}
       <AnimatePresence>
         {!playing && !showControls && !error && (
           <motion.div

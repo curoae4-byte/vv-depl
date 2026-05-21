@@ -135,10 +135,10 @@ const Footer = () => {
   return (
     <footer className="relative bg-[#080808] border-t border-[#F5F7F6]/5 pt-20 sm:pt-24 lg:pt-32 pb-10 sm:pb-12 z-10" id="contact">
       <PageShell>
-        {/* основной контент футера */}
-        {/* md: бренд на всю ширину (md:col-span-2), иначе навигация лезет в колонку рядом с гигантским лого */}
+        {/* Основной контент футера */}
+        {/* Адаптивная сетка: на мобилках в один столбец, на планшетах и выше — в несколько */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-14 lg:gap-16 mb-16 sm:mb-20 lg:mb-24">
-          {/* бренд */}
+          {/* Блок бренда */}
           <div className="col-span-1 min-w-0 md:col-span-2 lg:col-span-2">
             <h2 className="text-[clamp(1rem,4.2vw,3.2rem)] font-bounded tracking-tight sm:tracking-tighter mb-6 sm:mb-8 leading-[0.94]">
               <span className="block whitespace-nowrap">VALERY</span>
@@ -148,7 +148,7 @@ const Footer = () => {
               Продюсерский центр контента, где эстетика встречается с результатом.
             </p>
             
-            {/* соцсети (порядок оставил как задумано) */}
+            {/* Ссылки на соцсети */}
             <div className="flex flex-wrap items-start gap-4 sm:gap-6">
               <div className="flex w-10 flex-col items-center gap-1.5 sm:w-12">
                 <motion.a
@@ -181,7 +181,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* навигация — на md стоит рядом с контактами */}
+          {/* Навигация */}
           <div className="flex flex-col gap-6 sm:gap-8 min-w-0">
             <span className="text-[10px] font-['Bounded'] font-light uppercase tracking-[0.35em] sm:tracking-[0.5em] text-[#E10600]">НАВИГАЦИЯ</span>
             <ul className="flex flex-col gap-3 sm:gap-4 font-bounded text-base sm:text-lg md:text-xl uppercase tracking-tighter">
@@ -203,7 +203,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* контакты */}
+          {/* Контакты */}
           <div className="flex flex-col gap-6 sm:gap-8 min-w-0">
             <span className="text-[10px] font-['Bounded'] font-light uppercase tracking-[0.35em] sm:tracking-[0.5em] text-[#E10600]">ПООБЩАЕМСЯ?</span>
             <div className="flex flex-col gap-4 sm:gap-6 min-w-0">
@@ -211,7 +211,7 @@ const Footer = () => {
                 href="mailto:hello@valeryvisuals.com"
                 className="group relative flex w-full min-w-0 max-w-full items-start gap-3 sm:gap-4 overflow-visible"
               >
-                {/* Почта: намеренный разрыв по @ + лёгкий наклон — без «ломаного» переноса посередине домена */}
+                {/* Почта с небольшим наклоном для стиля */}
                 <div className="inline-block min-w-0 max-w-[calc(100%-2rem)] origin-left -rotate-[3.5deg] border-l-2 border-[#E10600]/45 pl-3 sm:pl-4 py-1 transition-[border-color,transform] duration-300 ease-out group-hover:-rotate-2 group-hover:border-[#E10600]">
                   <span className="block font-['Bounded'] font-light uppercase tracking-[0.18em] sm:tracking-[0.22em] text-[clamp(0.66rem,2.6vw,0.98rem)] text-[#F5F7F6] leading-[1.15] transition-colors group-hover:text-[#E10600]">
                     hello@
@@ -233,7 +233,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* плашки/бейджи */}
+        {/* Плашки наград (декоративные) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 py-8 sm:py-10 lg:py-12 border-y border-[#F5F7F6]/5 mb-10 sm:mb-12 grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all duration-700">
           {['PRIZZZ', 'NAGRADA', 'necmotri', 'ladno'].map((award) => (
             <div key={award} className="flex items-center justify-center text-[9px] sm:text-[10px] font-['Bounded'] font-light tracking-[0.18em] sm:tracking-[0.3em] uppercase text-center">
@@ -242,7 +242,7 @@ const Footer = () => {
           ))}
         </div>
 
-        {/* фирменные очки */}
+        {/* Фирменные очки с анимацией */}
         <div className="mb-10 sm:mb-12 flex items-center justify-center">
           <motion.div
             animate={{ y: [0, -6, 0], rotateX: [0, 6, 0], rotateY: [0, -6, 0] }}
@@ -318,7 +318,7 @@ const Footer = () => {
           </motion.div>
         </div>
 
-        {/* нижняя строка */}
+        {/* Нижняя строка с копирайтом */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-5 sm:gap-8 text-[9px] sm:text-[10px] font-['Bounded'] font-light uppercase tracking-[0.12em] sm:tracking-[0.3em] text-[#F5F7F6]/20 text-center md:text-left">
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
             <p className="break-words">© {currentYear} VALERY VISUALS.</p>

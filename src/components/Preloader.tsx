@@ -8,7 +8,7 @@ interface PreloaderProps {
 }
 
 const Preloader = ({ onComplete }: PreloaderProps) => {
-  // три стадии: прогресс → разъезд → финальное открытие
+  // Три стадии: прогресс загрузки → занавес приоткрыт → полное открытие
   const [stage, setStage] = useState<'intro' | 'veil' | 'enter'>('intro')
   const [progress, setProgress] = useState(0)
   const [isEntering, setIsEntering] = useState(false)
@@ -16,7 +16,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
   const rightCurtainRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // имитация загрузки (проценты для ритма)
+    // Имитация процесса загрузки в процентах
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -31,7 +31,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
   }, [])
 
   useEffect(() => {
-    // на 100% даём паузу и переходим к "щели"
+    // Когда 100%, переходим к стадии "занавес приоткрыт"
     if (progress === 100) {
       setTimeout(() => setStage('veil'), 500)
     }
@@ -39,7 +39,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
 
   useEffect(() => {
     if (stage === 'veil') {
-      // слегка раздвигаем занавес, чтобы появился маскот
+      // Слегка раздвигаем створки, чтобы был виден маскот
       gsap.to(leftCurtainRef.current, {
         xPercent: -10,
         duration: 2.5,
@@ -54,6 +54,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
   }, [stage])
 
   const handleEnter = () => {
+    // Финальное открытие занавеса при клике на кнопку "Войти"
     if (isEntering) return
     setIsEntering(true)
     setStage('enter')
@@ -62,7 +63,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
     const rightCurtain = rightCurtainRef.current
     if (!leftCurtain || !rightCurtain) return
 
-    // чистим анимации ховера перед финальным открытием
+    // Убираем временные эффекты перед полным открытием
     ;[leftCurtain, rightCurtain].forEach((curtain) => {
       gsap.killTweensOf(curtain)
       gsap.set(curtain, { rotateY: 0, rotateZ: 0, skewY: 0 })
@@ -74,7 +75,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
       }
     })
 
-    // открываем занавес полностью и отдаём управление приложению
+    // Створки разъезжаются полностью, открывая сайт
     gsap.to(leftCurtain, {
       xPercent: -100,
       duration: 1.5,
@@ -91,6 +92,7 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
   }
 
   const handleCurtainHover = (e: React.MouseEvent) => {
+    // Эффект "живой" ткани: занавес реагирует на движение мыши
     if (stage !== 'veil' || isEntering) return
 
     const target = e.currentTarget as HTMLDivElement
@@ -99,26 +101,25 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
     const y = e.clientY - rect.top
     const isLeft = target === leftCurtainRef.current
 
-    // "тяжёлый" эффект от близости к внутреннему краю
+    // Вычисляем силу "толчка" ткани
     const innerEdgeDist = isLeft ? (rect.width - x) : x
     const edgeEffect = Math.max(0, 1 - innerEdgeDist / 450)
     const pushAmount = edgeEffect * (isLeft ? -15 : 15)
 
-    // вертикаль нужна для лёгкого перекоса
     const yRel = (y / rect.height - 0.5)
 
-    // 3d слайд занавеса + небольшой наклон
+    // Анимируем наклон и растяжение ткани
     gsap.to(target, {
       xPercent: (isLeft ? -10 : 10) + pushAmount,
       rotateY: (isLeft ? 8 : -8) * edgeEffect,
-      rotateZ: (isLeft ? -1 : 1) * edgeEffect * 2, // лёгкий наклон от "тяжести"
-      skewY: yRel * (isLeft ? 4 : -4) * edgeEffect, // тянем ткань за курсором
+      rotateZ: (isLeft ? -1 : 1) * edgeEffect * 2,
+      skewY: yRel * (isLeft ? 4 : -4) * edgeEffect,
       duration: 0.7,
       ease: 'power2.out',
       overwrite: 'auto',
     })
 
-    // двигаем локальный "свет" за курсором
+    // Двигаем "фонарик" подсветки за мышкой
     const spot = target.querySelector('.curtain-spot') as HTMLDivElement
     if (spot) {
       gsap.to(spot, {
@@ -133,25 +134,24 @@ const Preloader = ({ onComplete }: PreloaderProps) => {
   }
 
   const handleCurtainLeave = (e: React.MouseEvent) => {
+    // Когда мышь уходит, ткань плавно возвращается в покой
     if (stage !== 'veil' || isEntering) return
 
     const target = e.currentTarget as HTMLDivElement
     const isLeft = target === leftCurtainRef.current
     
-    // возвращаем занавес в базу с "оседанием"
     gsap.to(target, {
       xPercent: isLeft ? -10 : 10,
       rotateY: 0,
       rotateZ: 0,
       skewY: 0,
       duration: 1.8,
-      ease: 'elastic.out(1, 0.5)', // чуть "оседает" обратно
+      ease: 'elastic.out(1, 0.5)',
       overwrite: 'auto',
     })
     
     const spot = target.querySelector('.curtain-spot') as HTMLDivElement
     if (spot) {
-      // гасим подсветку
       gsap.to(spot, {
         opacity: 0,
         duration: 0.8,

@@ -97,14 +97,14 @@ const Portfolio = () => {
   const openProject = (project: typeof projects[0]) => {
     clearPhaseTimers()
     setSelectedProject(project)
-    setModalPhase('lettersIn')
+    setModalPhase('lettersIn') // Первая стадия: появление букв названия
 
     const outTimer = window.setTimeout(() => {
-      setModalPhase('lettersOut')
+      setModalPhase('lettersOut') // Вторая стадия: буквы исчезают
     }, 900)
 
     const videoTimer = window.setTimeout(() => {
-      setModalPhase('video')
+      setModalPhase('video') // Финальная стадия: показываем видео
     }, 1500)
 
     phaseTimersRef.current.push(outTimer, videoTimer)
@@ -126,7 +126,7 @@ const Portfolio = () => {
     if (!selectedProject) return
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeProject()
+      if (e.key === 'Escape') closeProject() // Закрытие по нажатию Esc
     }
 
     window.addEventListener('keydown', onKeyDown)
@@ -134,6 +134,7 @@ const Portfolio = () => {
   }, [selectedProject])
 
   useEffect(() => {
+    // Блокируем скролл основной страницы при открытом плеере
     if (!selectedProject) return
 
     const scrollY = window.scrollY
@@ -163,8 +164,7 @@ const Portfolio = () => {
     window.addEventListener('keydown', preventScrollKeys)
 
     const onFullscreenChange = () => {
-      // После выхода из fullscreen у iframe меняются размеры viewport.
-      // Принудительно пересчитываем pin/scrub-триггеры (About/Hero/Contact).
+      // Исправляем возможные сдвиги верстки после выхода из полноэкранного режима
       requestAnimationFrame(() => ScrollTrigger.refresh())
     }
     document.addEventListener('fullscreenchange', onFullscreenChange)
@@ -186,6 +186,7 @@ const Portfolio = () => {
 
 
   useEffect(() => {
+    // Переключаем курсор на стандартный, когда открыто видео
     const shouldUseNativeCursor = Boolean(selectedProject && modalPhase === 'video')
     document.body.classList.toggle('video-modal-open', shouldUseNativeCursor)
 
@@ -212,6 +213,7 @@ const Portfolio = () => {
                 key="letters"
                 className="pointer-events-none flex max-w-[92vw] flex-wrap items-center justify-center gap-x-[0.04em] gap-y-1 text-center font-bounded text-[clamp(2rem,10vw,7rem)] uppercase leading-[0.9] text-[#F5F7F6]"
               >
+                {/* Анимированное появление названия проекта перед запуском видео */}
                 {Array.from(selectedProject.title).map((char, index) => (
                   <motion.span
                     key={`${index}-${char}`}
@@ -257,7 +259,7 @@ const Portfolio = () => {
     <>
       <section className="relative py-20 sm:py-24 lg:py-32 bg-[#080808] z-10" id="works">
         <PageShell>
-        {/* шапка секции */}
+        {/* Шапка секции */}
         <div className="mb-14 sm:mb-16 lg:mb-24 flex flex-col gap-4 sm:gap-5">
           <span className="text-[10px] sm:text-sm font-['Bounded'] font-light uppercase tracking-[0.32em] sm:tracking-[0.5em] text-[#E10600]">
             ОЦЕНИШЬ?
@@ -270,7 +272,7 @@ const Portfolio = () => {
           </p>
         </div>
 
-        {/* сетка карточек */}
+        {/* Сетка карточек с проектами */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 lg:gap-12">
           {projects.slice(0, 4).map((project) => (
             <ProjectCard
@@ -281,7 +283,7 @@ const Portfolio = () => {
           ))}
         </div>
 
-        {/* кнопка на полный список */}
+        {/* Кнопка перехода на полную страницу портфолио */}
         <div className="mt-16 sm:mt-20 lg:mt-32 text-center">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
@@ -297,6 +299,7 @@ const Portfolio = () => {
         </div>
         </PageShell>
       </section>
+      {/* Используем портал, чтобы модалка с видео была поверх всего сайта */}
       {typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null}
     </>
   )

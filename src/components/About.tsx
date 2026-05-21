@@ -52,28 +52,28 @@ const About = () => {
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: '+=400%', // 4 шага скролла для 4 переходов
-          pin: true,
-          scrub: true, // lenis уже дает плавность, scrub тут самый стабильный
+          end: '+=400%', // 4 шага прокрутки для 4-х частей текста
+          pin: true, // Фиксируем блок на экране
+          scrub: true, // Привязываем анимацию к движению колесика
         }
       })
 
-      // начальные состояния для всех граней, кроме первой
+      // Начальные настройки для всех частей куба, кроме первой
       gsap.set(faces.slice(1), {
         yPercent: 100,
         rotationX: -50,
         scale: 0.75,
         opacity: 0,
-        filter: 'blur(12px)' // Уменьшили с 24px для производительности
+        filter: 'blur(12px)' // Размытие для эффекта глубины
       })
 
-      // Прогресс-бар
+      // Полоска прогресса сверху
       if (progressBar) {
         gsap.set(progressBar, { scaleX: 0, transformOrigin: 'left center' })
         tl.to(progressBar, { scaleX: 1, ease: 'none', duration: faces.length - 1 }, 0)
       }
 
-      // Начальные состояния для параллакса внутри граней
+      // Настраиваем внутренние элементы каждой части
       faces.forEach((face, i) => {
         if (i > 0) {
           const img = face.querySelector('.face-bg-img')
@@ -83,7 +83,7 @@ const About = () => {
         }
       })
 
-      // Построение секвенции анимаций
+      // Создаем последовательность: одна часть уходит, другая приходит
       faces.forEach((face, i) => {
         if (i < faces.length - 1) {
           const nextFace = faces[i + 1]
@@ -92,13 +92,13 @@ const About = () => {
           const nextImg = nextFace.querySelector('.face-bg-img')
           const nextContent = nextFace.querySelector('.face-content')
 
-          // Уходящая грань
+          // Текущая часть улетает вверх и исчезает
           tl.to(face, {
             yPercent: -100,
             rotationX: 50,
             scale: 0.75,
             opacity: 0,
-            filter: 'blur(12px)', // Уменьшили с 24px
+            filter: 'blur(12px)',
             ease: 'power2.inOut',
             duration: 1
           }, i)
@@ -106,7 +106,7 @@ const About = () => {
           if (img) tl.to(img, { yPercent: 20, ease: 'power2.inOut', duration: 1 }, i)
           if (content) tl.to(content, { y: -80, opacity: 0, ease: 'power2.inOut', duration: 1 }, i)
 
-          // Приходящая грань
+          // Новая часть вылетает снизу и становится четкой
           tl.to(nextFace, {
             yPercent: 0,
             rotationX: 0,

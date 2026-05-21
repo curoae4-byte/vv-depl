@@ -39,7 +39,7 @@ function Root() {
           <Route path="/cookie-policy" element={<CookiePolicyPage />} />
         </Routes>
         <CursorFx />
-        {/* Служебные оверлеи: скрыть/показать клавишей L */}
+        {/* Вспомогательные сетки: можно скрыть или показать, нажав клавишу L */}
         {debugOverlaysVisible && (
           <>
             <LayoutGridOverlay />
@@ -51,7 +51,7 @@ function Root() {
   )
 }
 
-// точка входа: роутинг + глобальные оверлеи 
+// Точка запуска сайта: настраиваем пути и общие элементы 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Root />

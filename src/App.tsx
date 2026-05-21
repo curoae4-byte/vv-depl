@@ -12,30 +12,29 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import CookieBanner from './components/CookieBanner'
 
-// gsap + scrolltrigger: скролл-сцены (hero/about/contact) + синк с lenis
+// Настройка плагинов для плавной прокрутки и появления элементов
 gsap.registerPlugin(ScrollTrigger)
 
-// Вспомогательные функции для проверки срока жизни сохраненных данных
+// Проверяем, нужно ли показывать заставку (прелоадер)
 const checkPreloaderDone = () => {
-  // Если мы перешли по внутренней навигации (через Header или Link),
-  // то прелоадер показывать не нужно
+  // Если перешли с другой страницы этого же сайта, заставку не показываем
   const isNavFromInternal = sessionStorage.getItem('vv-nav-from-internal') === 'true';
   const isReferrerInternal = document.referrer && document.referrer.includes(window.location.origin);
   
   if (isNavFromInternal || isReferrerInternal) {
-    console.log('Internal navigation detected. Skipping preloader.')
-    sessionStorage.removeItem('vv-nav-from-internal') // Очищаем метку после использования
+    console.log('Внутренний переход. Пропускаем заставку.')
+    sessionStorage.removeItem('vv-nav-from-internal')
     return true
   }
 
-  // Если пользователь еще не сделал выбор по куки (ни accepted, ни declined),
-  // то прелоадер должен показываться каждый раз (возвращаем false)
+  // Если пользователь еще не принял куки, показываем заставку всегда
   const cookieConsent = localStorage.getItem('vv-cookie-consent')
   if (!cookieConsent) {
-    console.log('No cookie consent found. Preloader will show every time.')
+    console.log('Куки не приняты. Показываем заставку.')
     return false
   }
 
+  // Проверяем, не истекло ли время "сна" заставки (24 часа)
   const itemStr = localStorage.getItem('vv-preloader-done')
   if (!itemStr) return false
   try {
@@ -43,12 +42,12 @@ const checkPreloaderDone = () => {
     const timeLeft = item.expiry - Date.now()
     
     if (timeLeft <= 0) {
-      console.log('Preloader timer expired. Showing preloader...')
+      console.log('Время ожидания вышло. Снова показываем заставку.')
       localStorage.removeItem('vv-preloader-done')
       return false
     }
     
-    console.log(`Preloader skipped. Appears again in: ${Math.round(timeLeft / 1000)}s`)
+    console.log(`Заставка пропущена. Появится снова через: ${Math.round(timeLeft / 1000)} сек.`)
     return item.value === '1'
   } catch {
     return itemStr === '1'
@@ -56,17 +55,16 @@ const checkPreloaderDone = () => {
 }
 
 function App() {
-  //  загрузка/скролл/якоря
+  // Настройки загрузки, прокрутки и якорей
   const [loading, setLoading] = useState(() => {
     if (typeof window === 'undefined') return true
-    // Теперь прелоадер показывается по расписанию, даже если куки приняты
     return !checkPreloaderDone()
   })
   const lenisRef = useRef<Lenis | null>(null)
   const location = useLocation()
   const skipInitialHashScrollRef = useRef(true)
 
-  //  возвращаемся наверх (важно для старта после прелоадера)
+  // Функция сброса страницы в самое начало (вверх)
   const resetToTop = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
     document.documentElement.scrollTop = 0
@@ -74,26 +72,26 @@ function App() {
   }
 
   useEffect(() => {
-    // инициализируем плавный скролл
+    // Настраиваем мягкий скролл
     const lenis = new Lenis({
-      duration: 1.2, // Было 1.65 - ускоряем реакцию
+      duration: 1.2, // Скорость реакции
       easing: (t) => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
-      wheelMultiplier: 1.0, // Было 0.78 - делаем прокрутку более отзывчивой
-      touchMultiplier: 1.5, // Было 0.9 - увеличиваем чувствительность тача
+      wheelMultiplier: 1.0, // Насколько сильно крутит колесико
+      touchMultiplier: 1.5, // Насколько быстро листается пальцем
     })
     lenisRef.current = lenis
 
-    // scrolltrigger должен понимать, что скролл крутит lenis
+    // Соединяем скролл с анимациями
     lenis.on('scroll', ScrollTrigger.update)
 
-    // прокидываем время в lenis через ticker gsap
+    // Запускаем обновление кадров
     const onTick = (time: number) => {
       lenis.raf(time * 1000)
     }
     gsap.ticker.add(onTick)
 
-    // чтобы не было странных "рывков" при лаге
+    // Убираем рывки при торможении сайта
     gsap.ticker.lagSmoothing(1000, 16)
 
     return () => {
@@ -104,11 +102,12 @@ function App() {
   }, [])
 
   useEffect(() => {
+    // Секретная клавиша для очистки памяти сайта (клавиша [ )
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === '[') {
         localStorage.removeItem('vv-cookie-consent')
         localStorage.removeItem('vv-preloader-done')
-        console.log('Cookie & Storage cleared. Reloading...')
+        console.log('Память очищена. Перезагрузка...')
         window.location.reload()
       }
     }
@@ -125,7 +124,7 @@ function App() {
     let unlockTimer: number | null = null
 
     if (loading) {
-      // пока прелоадер — скролл стопаем и фиксируем страницу
+      // Пока идет загрузка, запрещаем крутить страницу
       lenisRef.current?.stop()
       lenisRef.current?.scrollTo(0, { immediate: true, force: true })
       resetToTop()
@@ -135,17 +134,17 @@ function App() {
       return
     }
 
-    // после прелоадера стартуем с hero
+    // После загрузки возвращаемся наверх и включаем скролл
     resetToTop()
     lenisRef.current?.scrollTo(0, { immediate: true, force: true })
 
-    // мягко включаем скролл после старта анимации появления
+    // Мягко разрешаем листать страницу
     unlockTimer = window.setTimeout(() => {
       lenisRef.current?.start()
       html.style.overflow = ''
       body.style.overflow = ''
       body.style.touchAction = ''
-      // обновляем scrolltrigger после появления, иначе pin в about может поехать
+      // Обновляем позиции анимаций через секунду
       setTimeout(() => {
         ScrollTrigger.refresh()
       }, 1000)
@@ -162,10 +161,10 @@ function App() {
   useEffect(() => {
     if (loading) return
 
+    // Логика перехода к нужному блоку (например, при клике в футере)
     const pendingSectionId = sessionStorage.getItem('vv-scroll-target')
     if (pendingSectionId && location.pathname === '/') {
       sessionStorage.removeItem('vv-scroll-target')
-      // Даем небольшую задержку, чтобы DOM успел прогрузиться
       setTimeout(() => {
         const target = document.getElementById(pendingSectionId)
         if (!target) return
@@ -183,20 +182,19 @@ function App() {
       return
     }
 
-    // после прелоадера не прыгаем сразу к hash, чтобы старт всегда был с hero
+    // Пропускаем прыжок к якорю при самом первом запуске
     if (skipInitialHashScrollRef.current) {
       skipInitialHashScrollRef.current = false
       return
     }
 
-    // якоря из шапки: /#services, /#contact
+    // Плавный скролл к секциям по ссылке (типа /#contact)
     const hash = location.hash.replace('#', '')
     if (!hash) return
 
     const target = document.getElementById(hash)
     if (!target) return
 
-    // учитываем фиксированный header, чтобы секция не пряталась под ним
     const headerOffset = 100
     const top = target.getBoundingClientRect().top + window.scrollY - headerOffset
     window.scrollTo({ top, behavior: 'smooth' })
@@ -204,17 +202,17 @@ function App() {
 
   return (
     <main className="bg-[#080808] text-[#F5F7F6] selection:bg-[#E10600] selection:text-[#F5F7F6]">
+      {/* Экран загрузки */}
       {loading && <Preloader onComplete={() => {
-        // прелоадер закончен — показываем сайт
         resetToTop()
-        const expiry = Date.now() + 24 * 60 * 60 * 1000 // 24 часа в миллисекундах
+        const expiry = Date.now() + 24 * 60 * 60 * 1000 // Запоминаем на 24 часа
         localStorage.setItem('vv-preloader-done', JSON.stringify({ value: '1', expiry }))
         setLoading(false)
       }} />}
 
       {!loading && <Header />}
 
-      {/* основной контент, с мягким reveal после прелоадера */}
+      {/* Основное содержимое сайта */}
       <div className={`app-shell ${loading ? '' : 'app-shell--ready'}`} aria-hidden={loading}>
         <div className="relative">
           <Hero />

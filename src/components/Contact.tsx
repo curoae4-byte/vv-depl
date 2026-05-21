@@ -23,20 +23,21 @@ const Contact = () => {
     if (!section || !heading || !sub || !btn) return
 
     const ctx = gsap.context(() => {
-      // Начальные состояния
+      // Прячем всё перед началом анимации
       gsap.set(heading, { y: 36, opacity: 0, filter: 'blur(6px)' })
       gsap.set([sub, btn],  { opacity: 0, y: 40, filter: 'blur(8px)' })
       gsap.set([lineLeft, lineRight], { scaleX: 0 })
 
+      // Настраиваем очередь анимаций
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: 'top 75%',
+          start: 'top 75%', // Запускаем, когда докрутили до 75% блока
           toggleActions: 'play none none none',
         },
       })
 
-      // 1. Горизонтальные линии раздвигаются
+      // 1. Сначала раздвигаем линии в стороны
       tl.to([lineLeft, lineRight], {
         scaleX: 1,
         duration: 0.9,
@@ -44,7 +45,7 @@ const Contact = () => {
         stagger: 0.06,
       })
 
-      // 2. Заголовок — минималистичное мягкое появление
+      // 2. Затем плавно проявляем заголовок
       tl.to(heading, {
         y: 0,
         opacity: 1,
@@ -53,7 +54,7 @@ const Contact = () => {
         ease: 'power3.out',
       }, '-=0.5')
 
-      // 3. Подзаголовок и кнопка
+      // 3. В конце показываем текст и кнопку
       tl.to([sub, btn], {
         opacity: 1,
         y: 0,

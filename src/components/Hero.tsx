@@ -14,7 +14,7 @@ const Hero = () => {
   const glareLeftRef  = useRef<SVGEllipseElement>(null)
   const glareRightRef = useRef<SVGEllipseElement>(null)
 
-  /* ── 3d наклон от мыши + блики ────────────────────────── */
+  /* ── Эффект наклона очков и движение бликов при движении мыши ────────────────────────── */
   useEffect(() => {
     const sticky      = stickyRef.current
     const glasses     = glassesRef.current
@@ -25,24 +25,23 @@ const Hero = () => {
     const rotateXTo = gsap.quickTo(glasses, 'rotationX', { ease: 'power3', duration: 0.6 })
     const rotateYTo = gsap.quickTo(glasses, 'rotationY', { ease: 'power3', duration: 0.6 })
 
-    // базовые позиции бликов (cx, cy)
+    // Базовые позиции бликов
     const GLARE_L = { cx: 62, cy: 28 }
     const GLARE_R = { cx: 242, cy: 28 }
 
     const onMove = (e: PointerEvent) => {
-      const nx = e.clientX / window.innerWidth   // 0..1
-      const ny = e.clientY / window.innerHeight  // 0..1
+      const nx = e.clientX / window.innerWidth   // Позиция X (от 0 до 1)
+      const ny = e.clientY / window.innerHeight  // Позиция Y (от 0 до 1)
 
-      const rotY = gsap.utils.interpolate(-10, 10, nx)  // -10..10 градусов
-      const rotX = gsap.utils.interpolate(10, -10, ny)  // 10..-10 градусов
+      const rotY = gsap.utils.interpolate(-10, 10, nx)  // Наклон влево-вправо
+      const rotX = gsap.utils.interpolate(10, -10, ny)  // Наклон вверх-вниз
 
       rotateXTo(rotX)
       rotateYTo(rotY)
 
-      // Блик движется противоположно повороту — как реальный световой рефлекс
-      // rotY: -10 (влево) → блик сдвигается вправо (+dx), и наоборот
-      const dx = rotY * -1.4   // горизонтальный сдвиг
-      const dy = rotX *  0.9   // вертикальный сдвиг
+      // Блики двигаются навстречу повороту, как настоящие отражения
+      const dx = rotY * -1.4   // Сдвиг по горизонтали
+      const dy = rotX *  0.9   // Сдвиг по вертикали
 
       if (glareLeft) {
         gsap.to(glareLeft, {
@@ -61,6 +60,7 @@ const Hero = () => {
     }
 
     const onLeave = () => {
+      // Возвращаем в центр, когда мышь уходит
       rotateXTo(0); rotateYTo(0)
       if (glareLeft)  gsap.to(glareLeft,  { attr: { cx: GLARE_L.cx, cy: GLARE_L.cy }, opacity: 0.28, duration: 0.8 })
       if (glareRight) gsap.to(glareRight, { attr: { cx: GLARE_R.cx, cy: GLARE_R.cy }, opacity: 0.28, duration: 0.8 })
@@ -74,7 +74,7 @@ const Hero = () => {
     }
   }, [])
 
-  /* ── появление по скроллу ─────────────────────────────── */
+  /* ── Анимации при прокрутке страницы ─────────────────────────────── */
   useEffect(() => {
     const wrapper = wrapperRef.current
     const glasses = glassesRef.current
@@ -87,11 +87,11 @@ const Hero = () => {
           trigger: wrapper,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1.2,
+          scrub: 1.2, // Привязываем анимацию к движению скролла
         },
       })
 
-      // Очки: начало — заметные, но уже чуть компактнее; по скроллу уходят на второй план
+      // Очки плавно исчезают и уменьшаются при скролле вниз
       tl.fromTo(
         glasses,
         { scale: 1.18, opacity: 0.92 },
@@ -99,7 +99,7 @@ const Hero = () => {
         0
       )
 
-      // базовый вход контейнера
+      // Текст заголовка плавно появляется
       tl.fromTo(
         text,
         { opacity: 0, y: 40, filter: 'blur(10px)' },
@@ -107,7 +107,7 @@ const Hero = () => {
         0.32
       )
 
-      // Кинематографичное появление заголовка строками
+      // Появление строк заголовка по очереди
       tl.fromTo(
         '.hero-title-line',
         { yPercent: 120, rotateX: -24, opacity: 0, filter: 'blur(12px)' },
@@ -122,7 +122,7 @@ const Hero = () => {
         0.38
       )
 
-      // Отдельный мягкий вход подзаголовка
+      // Мягкое появление подзаголовка
       tl.fromTo(
         '.hero-subtitle',
         { opacity: 0, y: 24, filter: 'blur(8px)' },
@@ -135,16 +135,16 @@ const Hero = () => {
   }, [])
 
   return (
-    /* высокий враппер — чтобы было куда скроллить */
+    /* Внешний контейнер с высотой для скролла */
     <div ref={wrapperRef} className="relative h-[280vh]" id="hero">
 
-      {/* липкий экран — держится на весь вьюпорт пока скроллим */}
+      {/* Липкий блок — висит на экране, пока мы крутим страницу */}
       <div
         ref={stickyRef}
         className="sticky top-0 h-[100svh] w-full flex items-center justify-center overflow-hidden pt-20 sm:pt-24 lg:pt-28"
         style={{ perspective: '900px' }}
       >
-        {/* углы «видоискателя» в пределах общего контейнера страницы */}
+        {/* Декоративные уголки «камеры» */}
         <div className="pointer-events-none absolute inset-0 z-[3] flex justify-center" aria-hidden>
           <div className="relative h-full w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="absolute left-2 top-[5.25rem] h-8 w-8 border-l-2 border-t-2 border-[#F5F7F6]/90 sm:left-3 sm:top-[5.75rem] sm:h-9 sm:w-9 md:left-4 md:top-24" />
@@ -154,13 +154,13 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* слой очков — наклон от мыши + масштаб по скроллу */}
+        {/* Контейнер с очками */}
         <div
           ref={glassesRef}
           className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
           style={{ transformStyle: 'preserve-3d', scale: 1.18, opacity: 0.92 }}
         >
-          {/* очки — svg с градиентами/тенями/бликами */}
+          {/* SVG-рисунок очков */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 360 110"
@@ -170,7 +170,7 @@ const Hero = () => {
             style={{ filter: 'drop-shadow(0 4px 32px rgba(0,0,0,0.9)) drop-shadow(0 1px 8px rgba(0,0,0,0.7))' }}
           >
             <defs>
-              {/* оправа — металлический градиент сверху вниз */}
+              {/* Оправа — градиент для эффекта металла */}
               <linearGradient id="rimGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%"   stopColor="#e8e8e8" stopOpacity="1" />
                 <stop offset="22%"  stopColor="#c0c0c0" stopOpacity="1" />
@@ -178,7 +178,7 @@ const Hero = () => {
                 <stop offset="100%" stopColor="#111111" stopOpacity="1" />
               </linearGradient>
 
-              {/* Линзы — равномерно чёрные */}
+              {/* Линзы — черный цвет */}
               <radialGradient id="lensL" cx="50%" cy="50%" r="50%">
                 <stop offset="0%"   stopColor="#050505" stopOpacity="1" />
                 <stop offset="100%" stopColor="#000000" stopOpacity="1" />
@@ -188,7 +188,7 @@ const Hero = () => {
                 <stop offset="100%" stopColor="#000000" stopOpacity="1" />
               </radialGradient>
 
-              {/* Внутренняя тень линзы */}
+              {/* Эффект тени внутри линз */}
               <filter id="innerShadow" x="-10%" y="-10%" width="120%" height="120%">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
                 <feOffset dx="0" dy="3" result="offsetBlur" />
@@ -229,7 +229,7 @@ const Hero = () => {
               filter="url(#innerShadow)"
             />
 
-            {/* ── ДИНАМИЧЕСКИЕ БЛИКИ (двигаются с мышью) ── */}
+            {/* ── БЛИКИ (двигаются за мышью) ── */}
             <ellipse
               ref={glareLeftRef}
               cx="62" cy="28" rx="24" ry="7"
@@ -245,7 +245,7 @@ const Hero = () => {
               transform="rotate(-16 242 28)"
             />
 
-            {/* ── ТОНКИЙ СВЕТОВОЙ КАНТ по контуру ── */}
+            {/* ── Тонкий контур очков ── */}
             <path
               fillRule="evenodd" clipRule="evenodd"
               d="M0 55C0 38.5387 11.4523 24.6875 27.6943 15.2305C44.0635 5.69955 66.211 0 90 0C117.361 0 141.278 7.24606 157.647 19.75C165.6 25.825 171.734 30 180 30C188.266 30 194.4 25.825 202.353 19.75C218.722 7.24606 242.639 0 270 0C293.789 0 315.938 5.69945 332.307 15.2305C348.548 24.6875 360 38.5388 360 55C360 71.4612 348.548 85.3125 332.307 94.7695C315.938 104.301 293.789 110 270 110C242.639 110 218.722 102.754 202.353 90.25C194.86 84.5265 187.902 80.3051 180 80.0039C172.098 80.3051 165.14 84.5265 157.647 90.25C141.278 102.754 117.361 110 90 110C66.211 110 44.0635 104.3 27.6943 94.7695C11.4523 85.3125 0 71.4613 0 55ZM160 55C160 75.813 128.524 92 90 92C51.4751 92 20 75.958 20 55.1455C20 34.3325 51.4751 18 90 18C128.524 18 160 34.187 160 55ZM200 55C200 75.813 231.476 92 270 92C308.524 92 340 75.958 340 55.1455C340 34.3325 308.524 18 270 18C231.476 18 200 34.187 200 55Z"
@@ -256,7 +256,7 @@ const Hero = () => {
           </svg>
         </div>
 
-        {/* текст — появляется по скроллу (ширина как у остальных секций) */}
+        {/* Текстовый блок заголовка */}
         <PageShell className="relative z-10">
           <div
             ref={textRef}
@@ -285,7 +285,7 @@ const Hero = () => {
           </div>
         </PageShell>
 
-        {/* подсказка "поскроль" */}
+        {/* Подсказка для пользователя */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -320,7 +320,7 @@ const Hero = () => {
           </motion.div>
         </motion.div>
 
-        {/* лёгкое зерно сверху */}
+        {/* Эффект шума на фоне */}
         <div
           className="absolute inset-0 pointer-events-none opacity-[0.06] z-20"
           style={{
