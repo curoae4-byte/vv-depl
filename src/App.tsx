@@ -81,7 +81,6 @@ function App() {
       smoothWheel: true,
       wheelMultiplier: 1.0, // Было 0.78 - делаем прокрутку более отзывчивой
       touchMultiplier: 1.5, // Было 0.9 - увеличиваем чувствительность тача
-      smoothTouch: false, // Отключаем плавность тача для мобилок, чтобы не было "киселя"
     })
     lenisRef.current = lenis
 
